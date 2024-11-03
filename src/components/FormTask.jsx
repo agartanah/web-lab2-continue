@@ -1,3 +1,5 @@
+import "../styles/main.css"
+
 export default function FormTask() {
     return (
         <div id="form-task-container" class="form-task-container">

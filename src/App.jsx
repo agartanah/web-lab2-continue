@@ -1,13 +1,15 @@
-import { useState } from 'react'
-import './App.css'
 import FormTask from './components/FormTask'
 import "../src/styles/main.css"
+import ListTask from './components/ListTask'
 
 function App() {
 
   return (
     <>
-      <FormTask></FormTask>
+      <div className='fake-body'>
+        <FormTask></FormTask>
+        <ListTask></ListTask>
+      </div>
     </>
   )
 }

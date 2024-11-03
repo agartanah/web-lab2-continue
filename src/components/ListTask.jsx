@@ -1,5 +1,27 @@
+import Task from "./Task";
+import "../styles/main.css"
+
 export default function ListTask() {
     return (
-        <img src="/src/images/no-tasks.svg" alt="" class="no-tasks"></img>
+        <div id="list-task-container" class="list-task-container">
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+            <Task></Task>
+        </div>
     );
 }

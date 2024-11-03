@@ -362,7 +362,7 @@
   background-color: #1B1A17;
 }
 
-body {
+.fake-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
