@@ -14,27 +14,24 @@ function App() {
 
   useEffect(() => {
     const localStorageElements = readLocalStorage();
-
-    localStorageElements.forEach(element => {
-      console.log(element.id);
-    });
-
-    setIndex(localStorageElements.length);
-
-    setListTasks(localStorageElements);
+    if (localStorageElements) {
+      setIndex(localStorageElements.length);
+  
+      setListTasks(localStorageElements);
+    }
   }, []);
 
   return (
     <>
       <div className='fake-body'>
-        <DeleteModal></DeleteModal>
-        <EditModal></EditModal>
-        <ShareModal></ShareModal>
-        <Backdrop></Backdrop>
+        <DeleteModal />
+        <EditModal />
+        <ShareModal />
+        <Backdrop />
 
-        <FormTask></FormTask>
+        <FormTask />
 
-        <ListTask></ListTask>
+        <ListTask />
       </div>
     </>
   )

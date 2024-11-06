@@ -1,18 +1,26 @@
 function setTaskToLocalStorage(taskId, taskTitle, taskDescription) {
-    localStorage.setItem(taskId, JSON.stringify({
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    const newTask = {
+        id: taskId,
         title: taskTitle,
         description: taskDescription
-    }));
+    };
+
+    tasks.push(newTask);
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function readLocalStorage() {
     let array = [];
 
-    for (let index = 0; index < localStorage.length; ++index) {
-        const key = localStorage.key(index);
-        let { title, description } = JSON.parse(localStorage.getItem(key));
-
-        array[index] = { id: Number(key), title: title, description: description };
+    if (localStorage.getItem("tasks") && localStorage.getItem("tasks").length) {
+        JSON.parse(localStorage.getItem("tasks")).forEach((task) => {
+            array.push({id: task.id, title: task.title, description: task.description})
+        })
+    } else {
+        return
     }
 
     array.sort((a, b) => a.id - b.id); // сортировка элементов к порядку их добавления
@@ -22,15 +30,8 @@ function readLocalStorage() {
 }
 
 function deleteTaskFromLocalStorage(taskId) {
-    localStorage.removeItem(taskId);
-
-    if (taskId != localStorage.length + 1) {
-        while(hasKey(taskId + 1)) {
-            localStorage.setItem(taskId, localStorage.getItem(taskId + 1));
-            localStorage.removeItem(taskId + 1);
-
-            ++taskId;
-        }
+    if (localStorage.getItem("tasks").length) {
+        localStorage.setItem("tasks", JSON.stringify(JSON.parse(localStorage.getItem("tasks")).filter((task) => task.id !== taskId)))
     }
 
     return readLocalStorage();
@@ -38,11 +39,6 @@ function deleteTaskFromLocalStorage(taskId) {
 
 function hasKey(key) {
     return localStorage.getItem(key) !== null;
-}
-
-function swap(key1, key2) {
-    const val1 = localStorage.getItem(key1);
-    const val2 = localStorage.getItem(key2);
 }
 
 export { setTaskToLocalStorage, readLocalStorage, deleteTaskFromLocalStorage, hasKey };
