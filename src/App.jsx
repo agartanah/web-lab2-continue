@@ -15,6 +15,10 @@ function App() {
   useEffect(() => {
     const localStorageElements = readLocalStorage();
 
+    localStorageElements.forEach(element => {
+      console.log(element.id);
+    });
+
     setIndex(localStorageElements.length);
 
     setListTasks(localStorageElements);

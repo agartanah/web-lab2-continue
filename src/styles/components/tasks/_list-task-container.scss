@@ -23,7 +23,7 @@
             width: 100%;
             min-width: 400px;
             padding: 2% 2% 1% 2%;
-            box-sizing: border-box;
+            box-sizing: border-box; 
             background-color: $light-background-color;
             @include button-border-style(8px, 2px, $orange-dark);
 
@@ -34,10 +34,12 @@
                 .task-title {
                     font-size: 22px;
                     margin-bottom: 4px;
+                    user-select: none;
                 }
         
                 .task-description {
                     font-size: 14px;
+                    user-select: none;
                 }
 
                 .task-title, .task-description {

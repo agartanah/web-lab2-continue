@@ -40,4 +40,9 @@ function hasKey(key) {
     return localStorage.getItem(key) !== null;
 }
 
+function swap(key1, key2) {
+    const val1 = localStorage.getItem(key1);
+    const val2 = localStorage.getItem(key2);
+}
+
 export { setTaskToLocalStorage, readLocalStorage, deleteTaskFromLocalStorage, hasKey };

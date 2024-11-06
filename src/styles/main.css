@@ -207,9 +207,15 @@
 .list-task-container .task-container .task .task-text .task-title {
   font-size: 22px;
   margin-bottom: 4px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .list-task-container .task-container .task .task-text .task-description {
   font-size: 14px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .list-task-container .task-container .task .task-text .task-title, .list-task-container .task-container .task .task-text .task-description {
   overflow: hidden;
