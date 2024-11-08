@@ -1,44 +1,90 @@
 function setTaskToLocalStorage(taskId, taskTitle, taskDescription) {
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-    const newTask = {
-        id: taskId,
+    localStorage.setItem(taskId, JSON.stringify({
         title: taskTitle,
         description: taskDescription
-    };
-
-    tasks.push(newTask);
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    }));
 }
 
 function readLocalStorage() {
     let array = [];
 
-    if (localStorage.getItem("tasks") && localStorage.getItem("tasks").length) {
-        JSON.parse(localStorage.getItem("tasks")).forEach((task) => {
-            array.push({id: task.id, title: task.title, description: task.description})
-        })
-    } else {
-        return
+    for (let index = 0; index < localStorage.length; ++index) {
+        const key = localStorage.key(index);
+        let { title, description } = JSON.parse(localStorage.getItem(key));
+
+        array[index] = { id: Number(key), title: title, description: description };
     }
 
-    array.sort((a, b) => a.id - b.id); // сортировка элементов к порядку их добавления
+    array.sort((a, b) => a.id - b.id);
     array.reverse();
 
-    return array;
+    return array || [];
 }
 
 function deleteTaskFromLocalStorage(taskId) {
-    if (localStorage.getItem("tasks").length) {
-        localStorage.setItem("tasks", JSON.stringify(JSON.parse(localStorage.getItem("tasks")).filter((task) => task.id !== taskId)))
+    localStorage.removeItem(taskId);
+
+    if (taskId != localStorage.length + 1) {
+        while(hasKey(taskId + 1)) {
+            localStorage.setItem(taskId, localStorage.getItem(taskId + 1));
+            localStorage.removeItem(taskId + 1);
+
+            ++taskId;
+        }
     }
 
     return readLocalStorage();
+}
+
+function shift(id, newId, listTasks) {
+    let array = JSON.parse(JSON.stringify(listTasks));
+    array.reverse();
+
+    if (!array.length) {
+        return;
+    }
+
+    let subArray;
+
+    if (id > newId) {
+        subArray = array.slice(newId - 1, id);
+
+        subArray = [subArray[subArray.length - 1], ...subArray];
+        subArray.splice(subArray.length - 1, 1);
+
+        for (let index = 0; index < subArray.length; ++index) {
+            subArray[index].id = index + newId;
+        }
+
+        array.splice(newId - 1, id - newId + 1, ...subArray);
+    }
+
+    if (id < newId) {
+        subArray = array.slice(id - 1, newId);
+
+        subArray = [...subArray, subArray[0]];
+        subArray.splice(0, 1);
+
+        for (let index = 0; index < subArray.length; ++index) {
+            subArray[index].id = index + id;
+        }
+
+        array.splice(id - 1, newId - id + 1, ...subArray);
+    }
+
+    array.forEach((item) => {
+        setTaskToLocalStorage(item.id, item.title, item.description);
+    });
+
+    return array.reverse();
 }
 
 function hasKey(key) {
     return localStorage.getItem(key) !== null;
 }
 
-export { setTaskToLocalStorage, readLocalStorage, deleteTaskFromLocalStorage, hasKey };
+function printArray(arr) {
+    console.log(JSON.stringify(arr));
+}
+
+export { setTaskToLocalStorage, readLocalStorage, deleteTaskFromLocalStorage, hasKey, shift };

@@ -15,6 +15,7 @@
         align-items: center;
         width: 100%;
         gap: 10px;
+        background-color: rgba(0, 0, 0, 0);
 
         .task {
             display: flex;
@@ -39,7 +40,6 @@
         
                 .task-description {
                     font-size: 14px;
-                    user-select: none;
                 }
 
                 .task-title, .task-description {
@@ -66,6 +66,7 @@
         width: 100%;
         min-width: 400px;
         gap: 10px;
+        background-color: rgba(0, 0, 0, 0);
     }
 
     .no-tasks {

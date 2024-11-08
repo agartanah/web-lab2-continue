@@ -185,6 +185,7 @@
   align-items: center;
   width: 100%;
   gap: 10px;
+  background-color: rgba(0, 0, 0, 0);
 }
 .list-task-container .task-container .task {
   display: flex;
@@ -213,9 +214,6 @@
 }
 .list-task-container .task-container .task .task-text .task-description {
   font-size: 14px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
 }
 .list-task-container .task-container .task .task-text .task-title, .list-task-container .task-container .task .task-text .task-description {
   overflow: hidden;
@@ -237,6 +235,7 @@
   width: 100%;
   min-width: 400px;
   gap: 10px;
+  background-color: rgba(0, 0, 0, 0);
 }
 .list-task-container .no-tasks {
   margin-top: 50px;
@@ -373,6 +372,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 ::-webkit-scrollbar {
