@@ -3,7 +3,7 @@ import {
     setTaskToLocalStorage
 } from "../data/localStorage";
 import { useState } from "react";
-import { useAppContext } from "../contexts/Context";
+import { useAppContext } from "../contexts/TaskManagerContext";
 
 export default function FormTask() {
     const { setListTasks, setIndex } = useAppContext();

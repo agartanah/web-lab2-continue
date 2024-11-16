@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/main.css"
-import { useAppContext } from "../contexts/Context";
+import { useAppContext } from "../contexts/TaskManagerContext";
 import { 
     shift
 } from "../data/localStorage";
@@ -11,6 +11,8 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
     const pTitle = useRef(null);
     const pDescription = useRef(null);
     const task = useRef(null);
+
+    const [ isInfoOpen, setIsInfoOpen ] = useState(false);
 
     useEffect(() => {
         if (currDraggedTask == id) {
@@ -57,20 +59,13 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
             task.current.style.transition = '';
             task.current.style.position = 'static';
             task.current.style.zIndex = 0;
-            console.log("OBNULIL", id);
-            console.log(draggedTask);
-            console.log(currDraggedTask);
-            console.log(position);
         }
-    }, [draggedTask, listTasks])
+    }, [draggedTask])
 
     const handleMouseDown = (event) => {
         setDraggedTask(id);
         setCurrDraggedTask(id);
         setPosition({x: 0, y: 0});
-
-        pTitle.current.classList.remove('task-title-extend');
-        pDescription.current.classList.remove('task-description-extend');
 
         task.current.style.transition = '';
         task.current.style.position = 'relative';
@@ -80,6 +75,7 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
     const handleMouseMove = (event) => {
         if (currDraggedTask != id) return;
 
+        setIsInfoOpen(false);
         setOpenTask(0);
 
         setPosition((prevPosition) => {    
@@ -99,8 +95,6 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
 
             return;
         }
-        
-        console.log("LIST-TAKS", listTasks);
 
         const array = shift(id, draggedTask, listTasks);
 
@@ -116,20 +110,26 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             ref={ task }>
-            <div class="task" onClick={ (event) => {
-                event.stopPropagation();
-                
-                if (openTask == id) {
-                    setOpenTask(0);
+            <div class="task" 
+                onClick={ (event) => {
+                    event.stopPropagation();
+                    
+                    if (openTask == id) {
+                        setOpenTask(0);
 
-                    return;
-                }
-                
-                setOpenTask(id);
-            }}>
+                        return;
+                    }
+                    
+                    setOpenTask(id);
+                } }
+            >
                 <div class="task-text">
-                    <p class="task-title" ref={ pTitle }>{ title }</p>
-                    <p class="task-description" ref={ pDescription }>{ description }</p>
+                    <p ref={ pTitle }
+                        className={ isInfoOpen ? "task-title task-title-extend" : "task-title" }    
+                    >{ title }</p>
+                    <p class="task-description" ref={ pDescription }
+                        className={ isInfoOpen  ? "task-description task-description-extend" : "task-description" }
+                    >{ description }</p>
                 </div>
                 <div class="dell-task-button-container">
                     <button class="dell-button" onClick={ (event) => {
@@ -141,36 +141,33 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
                     </button>
                 </div>
             </div>
-            { openTask == id &&
-                <div class="task-buttons-container">
-                    <button class="share-button" onClick={ (event) => {
-                        event.stopPropagation();
+            { 
+                openTask == id &&
+                    <div className="task-buttons-container">
+                        <button className="share-button" onClick={ (event) => {
+                            event.stopPropagation();
 
-                        setCurrTask({ id: id, title: pTitle, description: pDescription })
-                        setCurrOperation('share');
-                    }}></button>
-                    <button class="info-button" onClick={ (event) => {
-                        event.stopPropagation();
+                            setCurrTask({ id: id, title: pTitle, description: pDescription })
+                            setCurrOperation('share');
+                        }}></button>
+                        <button className="info-button" onClick={ (event) => {
+                            event.stopPropagation();
 
-                        if (pTitle.current.classList.contains('task-title-extend')) {
-                            pTitle.current.classList.remove('task-title-extend');
-                        } else {
-                            pTitle.current.classList.add('task-title-extend');
-                        }
-                    
-                        if (pDescription.current.classList.contains('task-description-extend')) {
-                            pDescription.current.classList.remove('task-description-extend');
-                        } else {
-                            pDescription.current.classList.add('task-description-extend');
-                        }
-                    }}></button>
-                    <button class="edit-button" onClick={ (event) => {
-                        event.stopPropagation();
+                            if (isInfoOpen) {
+                                setIsInfoOpen(false);
 
-                        setCurrTask({ id: id, title: pTitle, description: pDescription })
-                        setCurrOperation('edit');
-                    }}></button>
-                </div>
+                                return;
+                            }
+
+                            setIsInfoOpen(true);
+                        }}></button>
+                        <button className="edit-button" onClick={ (event) => {
+                            event.stopPropagation();
+
+                            setCurrTask({ id: id, title: pTitle, description: pDescription })
+                            setCurrOperation('edit');
+                        }}></button>
+                    </div>
             }
         </div>
     );
