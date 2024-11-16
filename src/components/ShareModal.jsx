@@ -2,39 +2,13 @@ import { useAppContext } from "../contexts/Context";
 import React, { useRef, useEffect } from 'react';
 
 export default function ShareModal() {
-    const { shareModal, currTask, currOperation, setCurrOperation, backdrop } = useAppContext();
+    const { shareModal, currTask, currOperation, setCurrOperation } = useAppContext();
 
-    const buttonCopy = useRef(null);
-    const buttonVk = useRef(null);
-    const buttonTelegram = useRef(null);
-    const buttonWhatsup = useRef(null);
-    const buttonFacebook = useRef(null);
     const shareModalContent = useRef(null);
 
     useEffect(() => {
         if (currOperation == 'share') {
             shareModal.current.showModal();
-            shareModal.current.addEventListener('click', onClickBackdrop);
-            
-            backdrop.current.classList.add('backdrop-open');
-        
-            buttonCopy.current.addEventListener('click', onClickCopy, { once: true });
-            buttonVk.current.addEventListener('click', onClickVk, { once: true });
-            buttonTelegram.current.addEventListener('click', onClickTelegram, { once: true });
-            buttonWhatsup.current.addEventListener('click', onClickWhatsup, { once: true });
-            buttonFacebook.current.addEventListener('click', onClickFacebook, { once: true });
-    
-            return () => {
-                buttonCopy.current.removeEventListener('click', onClickCopy);
-                buttonVk.current.removeEventListener('click', onClickVk);
-                buttonTelegram.current.removeEventListener('click', onClickTelegram);
-                buttonWhatsup.current.removeEventListener('click', onClickWhatsup);
-                buttonFacebook.current.removeEventListener('click', onClickFacebook);
-
-                shareModal.current.removeEventListener('click', onClickBackdrop);
-
-                backdrop.current.classList.remove('backdrop-open');
-            };
         }
     }, [currOperation]);
 
@@ -54,10 +28,7 @@ export default function ShareModal() {
             Description: ${ currTask.description.current.textContent }`
         );
     
-        shareModal.current.close(); 
-        shareModal.current.removeEventListener('click', onClickBackdrop);
-    
-        backdrop.current.classList.remove('backdrop-open'); 
+        shareModal.current.close();
 
         setCurrOperation('');
     }
@@ -67,10 +38,7 @@ export default function ShareModal() {
             
         // код для поделиться в вк
         
-        shareModal.current.close(); 
-        shareModal.current.removeEventListener('click', onClickBackdrop);
-    
-        backdrop.current.classList.remove('backdrop-open'); 
+        shareModal.current.close();
 
         setCurrOperation('');
     }
@@ -80,10 +48,7 @@ export default function ShareModal() {
             
         // код для поделиться в телеграме
     
-        shareModal.current.close(); 
-        shareModal.current.removeEventListener('click', onClickBackdrop);
-    
-        backdrop.current.classList.remove('backdrop-open'); 
+        shareModal.current.close();
 
         setCurrOperation('');
     }
@@ -93,10 +58,7 @@ export default function ShareModal() {
             
         // код для поделиться в ватс апе
     
-        shareModal.current.close(); 
-        shareModal.current.removeEventListener('click', onClickBackdrop);
-    
-        backdrop.current.classList.remove('backdrop-open'); 
+        shareModal.current.close();
 
         setCurrOperation('');
     }
@@ -106,22 +68,19 @@ export default function ShareModal() {
             
         // код для поделиться в фэйсбуке
     
-        shareModal.current.close(); 
-        shareModal.current.removeEventListener('click', onClickBackdrop);
-    
-        backdrop.current.classList.remove('backdrop-open'); 
+        shareModal.current.close();
     
         setCurrOperation('');
     }
 
     return (
-        <dialog class="share-modal" open="" ref={ shareModal }>
-            <div class="share-modal-content" ref={ shareModalContent }>
-                <button class="copy-button" ref={ buttonCopy }></button>
-                <button class="vk-button" ref={ buttonVk }></button>
-                <button class="telegram-button" ref={ buttonTelegram }></button>
-                <button class="whatsup-button" ref={ buttonWhatsup }></button>
-                <button class="facebook-button" ref={ buttonFacebook }></button>
+        <dialog className="share-modal" open="" ref={ shareModal } onMouseDown={ onClickBackdrop }>
+            <div className="share-modal-content" ref={ shareModalContent }>
+                <button className="copy-button" onClick={ onClickCopy }></button>
+                <button className="vk-button" onClick={ onClickVk }></button>
+                <button className="telegram-button" onClick={ onClickTelegram }></button>
+                <button className="whatsup-button" onClick={ onClickWhatsup }></button>
+                <button className="facebook-button" onClick={ onClickFacebook }></button>
             </div>
         </dialog>
     );
