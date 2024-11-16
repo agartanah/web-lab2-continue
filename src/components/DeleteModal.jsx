@@ -6,9 +6,6 @@ import {
 
 export default function DeleteModal() {
     const { delModal, openTask, setOpenTask, currTask, currOperation, setCurrOperation, setListTasks, setIndex } = useAppContext();
-
-    const buttonYes = useRef(null);
-    const buttonNo = useRef(null)
     const delModalContent = useRef(null);
 
     useEffect(() => {
@@ -29,11 +26,7 @@ export default function DeleteModal() {
     function onClickYes() {
         delModal.current.close();
 
-        setIndex(prevIndex => { 
-            let newIndex = prevIndex - 1;
-
-            return newIndex;
-        });
+        setIndex(prevIndex => prevIndex - 1);
         
         if (openTask == currTask.id) {
             setOpenTask('');
@@ -42,7 +35,6 @@ export default function DeleteModal() {
         setListTasks(deleteTaskFromLocalStorage(currTask.id));
         
         setCurrOperation('');
-        console.log('YES');
     }
 
     function onClickNo() {
@@ -60,8 +52,8 @@ export default function DeleteModal() {
                     <p class="modal-text">Delete this task?</p>
                 </div>
                 <div class="modal-buttons-container">
-                    <button class="text-buttons" ref={ buttonYes } onClick={ onClickYes }>Да</button>
-                    <button class="text-buttons re-bg" ref={ buttonNo } onClick={ onClickNo }>Нет</button>
+                    <button class="text-buttons" onClick={ onClickYes }>Да</button>
+                    <button class="text-buttons re-bg" onClick={ onClickNo }>Нет</button>
                 </div>
             </div>
         </dialog>
