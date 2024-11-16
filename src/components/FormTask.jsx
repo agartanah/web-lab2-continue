@@ -2,25 +2,26 @@ import "../styles/main.css"
 import { 
     setTaskToLocalStorage
 } from "../data/localStorage";
-import { useRef } from "react";
+import { useState } from "react";
 import { useAppContext } from "../contexts/Context";
 
 export default function FormTask() {
     const { setListTasks, setIndex } = useAppContext();
 
-    const inputTitle = useRef(null);
-    const inputDescription = useRef(null);
+    const [ titleValue, setTitleValue ] = useState('');
+    const [ descriptionValue, setDescriptionValue ] = useState('');
+    const [ isError, setIsError ] = useState(false);
 
     const addClick = () => {
-        let title = inputTitle.current.value;
-        let description = inputDescription.current.value;
+        const title = titleValue;
+        let description = descriptionValue;
 
         if (title == '') {
-            inputTitle.current.className += ' error-value';
+            setIsError(true);
 
             return;
         } else {
-            inputTitle.current.className = 'input-task';
+            setIsError(false);
         }
 
         if (description == '') {
@@ -29,7 +30,6 @@ export default function FormTask() {
 
         setIndex(prevIndex => {
             let newIndex = prevIndex + 1;
-            console.log(newIndex);
 
             setTaskToLocalStorage(newIndex, title, description);
             setListTasks(prevTasks => [
@@ -41,22 +41,31 @@ export default function FormTask() {
                 ...prevTasks
             ]);
 
-            inputTitle.current.value = '';
-            inputDescription.current.value = '';
+            setTitleValue('');
+            setDescriptionValue('');
+            setIsError(false);
 
             return newIndex;
         });
     }
 
     return (
-        <div id="form-task-container" class="form-task-container">
-            <div class="input-container">
-                <input type="text" class="input-task" placeholder="Title..." ref={ inputTitle }/>
-                <input type="text" class="input-task" placeholder="About..." ref={ inputDescription }/>
+        <div className="form-task-container">
+            <div className="input-container">
+                <input type="text" placeholder="Title..." value={ titleValue }
+                    className={ isError ? "input-task error-value" : "input-task" }
+                    onChange={ (event) => {
+                        setTitleValue(event.target.value);
+                    } }
+                />
+                <input type="text" className="input-task" placeholder="About..." value={ descriptionValue }
+                    onChange={ (event) => {
+                        setDescriptionValue(event.target.value);
+                    } }
+                />
             </div>
-            <div class="add-task-button-container">
-                <button type="submit" id="add-button" class="add-button" onClick={ addClick }>
-                </button>
+            <div className="add-task-button-container">
+                <button type="submit" className="add-button" onClick={ addClick }/>
             </div>
         </div>
     );
