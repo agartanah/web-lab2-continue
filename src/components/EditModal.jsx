@@ -1,41 +1,26 @@
 import { useAppContext } from "../contexts/Context";
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
     setTaskToLocalStorage
 } from "../data/localStorage";
 
 export default function EditModal() {
-    const { editModal, currTask, currOperation, setCurrOperation, backdrop } = useAppContext();
+    const { editModal, currTask, currOperation, setCurrOperation } = useAppContext();
 
     const inputTitle = useRef(null);
     const inputDescription = useRef(null);
-    const buttonCancel = useRef(null);
-    const buttonSave = useRef(null);
     const editModalContent = useRef(null);
-    const inputContainer = useRef(null);
+
+    const [ isError, setIsError ] = useState(false);
+    const [ titleValue, setTitleValue ] = useState('Title...');
+    const [ descriptionValue, setDescriptionValue ] = useState('Description...');
 
     useEffect(() => {
         if (currOperation == 'edit') {
             editModal.current.showModal();
-            editModal.current.addEventListener('mousedown', onClickBackdrop);
             
-            backdrop.current.classList.add('backdrop-open');
-        
-            inputTitle.current.value = currTask.title.current.textContent;
-            inputDescription.current.value = currTask.description.current.textContent;
-        
-            buttonCancel.current.addEventListener('click', onClickCancel, { once: true });
-            buttonSave.current.addEventListener('click', onClickSave);
-
-            return () => {
-                buttonCancel.current.removeEventListener('click', onClickCancel);
-                buttonSave.current.removeEventListener('click', onClickSave);
-
-                editModal.current.removeEventListener('mousedown', onClickBackdrop);
-
-                backdrop.current.classList.remove('backdrop-open');
-                inputTitle.current.classList.remove('error-value');
-            };
+            setTitleValue(currTask.title.current.textContent);
+            setDescriptionValue(currTask.description.current.textContent);
         }
     }, [currOperation]);
 
@@ -46,25 +31,24 @@ export default function EditModal() {
             event.target != inputDescription.current)) {
             editModal.current.close();
             
+            setIsError(false);
             setCurrOperation('');
         }
     }
     
     function onClickSave() {
-        const title = inputTitle.current.value;
-        const description = inputDescription.current.value;
-
-        if (title == '') {
-            inputTitle.current.classList.add('error-value');
+        if (titleValue == '') {
+            setIsError(true);
     
             return;
         }
-        inputTitle.current.classList.remove('error-value');
+
+        setIsError(false);
     
-        currTask.title.current.textContent = title;
-        currTask.description.current.textContent = description;
+        currTask.title.current.textContent = titleValue;
+        currTask.description.current.textContent = descriptionValue;
     
-        setTaskToLocalStorage(currTask.id, title, description);
+        setTaskToLocalStorage(currTask.id, titleValue, descriptionValue);
     
         editModal.current.close();
 
@@ -74,19 +58,33 @@ export default function EditModal() {
     function onClickCancel() {
         editModal.current.close();
 
+        setIsError(false);
         setCurrOperation('');
     }
 
     return (
-        <dialog class="edit-modal" open="" ref={ editModal }>
-            <div class="edit-modal-content" ref={ editModalContent }>
-                <div class="input-container" ref={ inputContainer }>
-                    <input type="text" placeholder="Title..." class="input-task" ref={ inputTitle }/>
-                    <textarea placeholder="Description..." class="input-task input-description" ref={ inputDescription }></textarea>
+        <dialog className="edit-modal" open="" ref={ editModal } onMouseDown={ onClickBackdrop }>
+            <div className="edit-modal-content" ref={ editModalContent }>
+                <div className="input-container">
+                    <input type="text"
+                        className={ isError ? "input-task error-value" : "input-task" }
+                        ref={ inputTitle }
+                        value={ titleValue }
+                        onChange={ (event) => {
+                            setTitleValue(event.target.value);
+                        } }
+                    />
+                    <textarea className="input-task input-description"
+                        ref={ inputDescription }
+                        value={ descriptionValue }
+                        onChange={ (event) => {
+                            setDescriptionValue(event.target.value);
+                        } }
+                    />
                 </div>
-                <div class="edit-modal-buttons-container">
-                    <button class="text-buttons" ref={ buttonCancel }>Cancel</button>
-                    <button class="text-buttons" ref={ buttonSave }>Save</button>
+                <div className="edit-modal-buttons-container">
+                    <button className="text-buttons" onClick={ onClickCancel }>Cancel</button>
+                    <button className="text-buttons" onClick={ onClickSave }>Save</button>
                 </div>
             </div>
         </dialog>

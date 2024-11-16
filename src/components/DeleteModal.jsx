@@ -44,7 +44,7 @@ export default function DeleteModal() {
     }
 
     return (
-        <dialog class="modal-window" open="" ref={ delModal } onClick={ onClickBackdrop }>
+        <dialog class="modal-window" open="" ref={ delModal } onMouseDown={ onClickBackdrop }>
             <div class="modal-content-container" ref={ delModalContent }>
                 <div class="modal-decoration">
                 </div>
