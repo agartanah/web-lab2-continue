@@ -1,9 +1,9 @@
 import { useAppContext } from "../contexts/Context";
 
 export default function Backdrop() {
-    const { backdrop } = useAppContext();
+    const { backdrop, currOperation } = useAppContext();
     
     return (
-        <div class="backdrop" ref={ backdrop }></div>
+        <div ref={ backdrop } className={ currOperation !== '' ? "backdrop backdrop-open" : "backdrop" }></div>
     );
 }

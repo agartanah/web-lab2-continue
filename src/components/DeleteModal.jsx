@@ -5,7 +5,7 @@ import {
 } from "../data/localStorage";
 
 export default function DeleteModal() {
-    const { delModal, openTask, setOpenTask, currTask, currOperation, setCurrOperation, setListTasks, setIndex, backdrop } = useAppContext();
+    const { delModal, openTask, setOpenTask, currTask, currOperation, setCurrOperation, setListTasks, setIndex } = useAppContext();
 
     const buttonYes = useRef(null);
     const buttonNo = useRef(null)
@@ -14,29 +14,6 @@ export default function DeleteModal() {
     useEffect(() => {
         if (currOperation == 'del') {   
             delModal.current.showModal();
-            delModal.current.addEventListener('click', onClickBackdrop);
-
-            backdrop.current.classList.add('backdrop-open');
-
-            buttonYes.current.addEventListener(
-                'click', 
-                onClickYes,
-                { once: true }
-            );
-            buttonNo.current.addEventListener(
-                'click', 
-                onClickNo,
-                { once: true }
-            );
-            
-            return () => {
-                buttonYes.current.removeEventListener('click', onClickYes);
-                buttonNo.current.removeEventListener('click', onClickNo);
-    
-                delModal.current.removeEventListener('click', onClickBackdrop);
-        
-                backdrop.current.classList.remove('backdrop-open');
-            };
         }
     }, [currOperation])
 
@@ -75,7 +52,7 @@ export default function DeleteModal() {
     }
 
     return (
-        <dialog class="modal-window" open="" ref={ delModal }>
+        <dialog class="modal-window" open="" ref={ delModal } onClick={ onClickBackdrop }>
             <div class="modal-content-container" ref={ delModalContent }>
                 <div class="modal-decoration">
                 </div>
@@ -83,8 +60,8 @@ export default function DeleteModal() {
                     <p class="modal-text">Delete this task?</p>
                 </div>
                 <div class="modal-buttons-container">
-                    <button class="text-buttons" ref={ buttonYes }>Да</button>
-                    <button class="text-buttons re-bg" ref={ buttonNo }>Нет</button>
+                    <button class="text-buttons" ref={ buttonYes } onClick={ onClickYes }>Да</button>
+                    <button class="text-buttons re-bg" ref={ buttonNo } onClick={ onClickNo }>Нет</button>
                 </div>
             </div>
         </dialog>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/main.css"
 import { useAppContext } from "../contexts/Context";
 import { 
@@ -10,7 +10,6 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
 
     const pTitle = useRef(null);
     const pDescription = useRef(null);
-
     const task = useRef(null);
 
     useEffect(() => {
@@ -58,11 +57,14 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
             task.current.style.transition = '';
             task.current.style.position = 'static';
             task.current.style.zIndex = 0;
+            console.log("OBNULIL", id);
+            console.log(draggedTask);
+            console.log(currDraggedTask);
+            console.log(position);
         }
-    }, [draggedTask])
+    }, [draggedTask, listTasks])
 
     const handleMouseDown = (event) => {
-        setIsDragging(true);
         setDraggedTask(id);
         setCurrDraggedTask(id);
         setPosition({x: 0, y: 0});
@@ -94,16 +96,16 @@ export default function Task({ title, description, id, openTask, setOpenTask, po
             setPosition({ x: 0, y: 0 });
             setCurrDraggedTask(0);
             setDraggedTask(0);
-            setIsDragging(false);
 
             return;
         }
+        
+        console.log("LIST-TAKS", listTasks);
 
         const array = shift(id, draggedTask, listTasks);
 
         setCurrDraggedTask(0);
         setDraggedTask(0);
-        setIsDragging(false);
         setListTasks(array);
         setOpenTask(id);
     };
